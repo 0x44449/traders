@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{ "path": ".", "name": "root" },
+		{
+			"path": "backend"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {
+		"dotnet.defaultSolution": "backend/Traders.sln"
+	}
+}

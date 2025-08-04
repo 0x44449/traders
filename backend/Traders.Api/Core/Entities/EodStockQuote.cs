@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using Traders.Api.Core.Types;
 
 namespace Traders.Api.Core.Entities;
 
-public class StockQuote
+[PrimaryKey(nameof(Symbol), nameof(QuoteDate))]
+public class EodStockQuote
 {
     /// <summary>
     /// 종목 코드
@@ -77,5 +79,7 @@ public class StockQuote
     /// <summary>
     /// 적재일
     /// </summary>
-    public DateTime QuoteDate { get; init; }
+    public DateOnly QuoteDate { get; init; }
+
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }

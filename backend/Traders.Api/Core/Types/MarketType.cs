@@ -4,5 +4,6 @@ public enum MarketType
 {
     KOSPI,
     KOSDAQ,
-    // Add more market types as needed, e.g., KONEX, OTC, etc.
+    KOSDAQ_GLOBAL,
+    KONEX,
 }

@@ -5,10 +5,16 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, ChevronRight, Heart, Search, Settings, Star, TrendingUp, User } from "lucide-react";
+import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function NavSideBar() {
-  const [activeMenu, setActiveMenu] = useState('search');
+  const router = useRouter();
+  const pathname = usePathname();
+  const activeMenu = pathname.split('/')[1] || '';
+  console.log("Active Menu:", activeMenu);
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const menuItems = [{
@@ -32,6 +38,11 @@ export default function NavSideBar() {
     label: '프로필',
   }];
 
+  const handleMenuClick = (id: string) => {
+    if (id === activeMenu) return;
+    router.push(`/${id}`);
+  };
+
   const renderCollapsed = () => {
     return (
       <div className="w-16 h-screen bg-sidebar border-r border-sidebar-border flex flex-col items-center py-4 sticky top-0">
@@ -53,7 +64,7 @@ export default function NavSideBar() {
                 key={item.id}
                 variant={activeMenu === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setActiveMenu(item.id)}
+                onClick={() => handleMenuClick(item.id)}
                 className="h-10 w-10 p-0 relative"
                 title={item.label}
               >
@@ -78,6 +89,7 @@ export default function NavSideBar() {
                 size="sm"
                 className="h-10 w-10 p-0"
                 title={item.label}
+                onClick={() => handleMenuClick(item.id)}
               >
                 <Icon className="h-4 w-4" />
               </Button>
@@ -123,7 +135,7 @@ export default function NavSideBar() {
                       key={item.id}
                       variant={activeMenu === item.id ? "default" : "ghost"}
                       className="w-full justify-start gap-3 h-10"
-                      onClick={() => setActiveMenu(item.id)}
+                      onClick={() => handleMenuClick(item.id)}
                     >
                       <Icon className="h-4 w-4" />
                       <span>{item.label}</span>
@@ -156,6 +168,7 @@ export default function NavSideBar() {
                   key={item.id}
                   variant="ghost"
                   className="w-full justify-start gap-3 h-9"
+                  onClick={() => handleMenuClick(item.id)}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{item.label}</span>

@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Traders.Api.Core.Types;
 
+namespace Traders.Api.Core.Entities;
+
 [PrimaryKey(nameof(StandardCode))]
 public class StockInfo
 {

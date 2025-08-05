@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Traders.Api.Core.Contexts;
 using Traders.Api.Core.Entities;
 using Traders.Api.Core.Types;
+using Traders.Api.External.Krx;
 
 namespace Traders.Api.Features.Stock;
 
@@ -146,6 +147,79 @@ public class StockService
 
                 listStockInfos.Add(record);
             }
+        }
+
+        if (listStockInfos.Count > 0)
+        {
+            await stockContext.BulkInsertOrUpdateAsync(listStockInfos);
+        }
+    }
+
+    public async Task ScrapeEodStockQuoteAsync(DateOnly date)
+    {
+        var scraper = new KrxScraper();
+        var eodStockPrices = await scraper.GetEodStockPricesAsync(date);
+
+        var listEodStockQuotes = new List<EodStockQuote>();
+
+        foreach (var price in eodStockPrices)
+        {
+            var stockQuote = new EodStockQuote
+            {
+                Symbol = price.IsuSrtCd,
+                Name = price.IsuAbbrv,
+                Market = Enum.Parse<MarketType>(price.MktNm.Replace(" ", "_")),
+                Section = price.SectTpNm,
+                OpenPrice = KrxConverter.ToDecimal(price.TddOpnPrc),
+                ClosePrice = KrxConverter.ToDecimal(price.TddClsPrc),
+                HighPrice = KrxConverter.ToDecimal(price.TddHgPrc),
+                LowPrice = KrxConverter.ToDecimal(price.TddLwPrc),
+                PriceChange = KrxConverter.ToDecimal(price.CmpPrevddPrc),
+                PriceChangePercentage = KrxConverter.ToDecimal(price.FlucRt),
+                Volume = KrxConverter.ToLong(price.AccTrdVol),
+                Turnover = KrxConverter.ToDecimal(price.AccTrdVal),
+                MarketCap = KrxConverter.ToDecimal(price.MktCap),
+                OutstandingShares = KrxConverter.ToLong(price.ListShrs),
+                QuoteDate = date,
+                UpdatedAt = DateTime.Now
+            };
+
+            listEodStockQuotes.Add(stockQuote);
+        }
+
+        if (listEodStockQuotes.Count > 0)
+        {
+            await stockContext.BulkInsertOrUpdateAsync(listEodStockQuotes);
+        }
+    }
+
+    public async Task ScrapeStockInfoAsync()
+    {
+        var scraper = new KrxScraper();
+        var stockInfos = await scraper.GetStockInfoAsync();
+
+        var listStockInfos = new List<StockInfo>();
+
+        foreach (var info in stockInfos)
+        {
+            var stockInfo = new StockInfo
+            {
+                StandardCode = info.IsuCd,
+                Symbol = info.IsuSrtCd,
+                KoreanName = info.IsuAbbrv,
+                KoreanShortName = info.IsuAbbrv,
+                EnglishName = info.IsuEngNm,
+                ListingDate = DateOnly.Parse(info.ListDd.Replace("/", "-"), CultureInfo.InvariantCulture),
+                Market = Enum.Parse<MarketType>(info.MktTpNm.Replace(" ", "_")),
+                SecurityType = info.SecuGrpNm,
+                Section = info.SectTpNm,
+                ShareClass = info.KindStkcertTpNm,
+                ParValue = info.ParVal == "무액면" ? -1 : decimal.Parse(info.ParVal, CultureInfo.InvariantCulture),
+                OutstandingShares = KrxConverter.ToLong(info.ListShrs),
+                UpdatedAt = DateTime.Now
+            };
+
+            listStockInfos.Add(stockInfo);
         }
 
         if (listStockInfos.Count > 0)

@@ -47,4 +47,20 @@ public class StockController : ControllerBase
 
         return Ok(new ApiResultDto<object?>(null));
     }
+
+    [HttpGet("scrape/eod")]
+    public async Task<ActionResult<ApiResultDto<object>>> ScrapeEodStockQuote([FromQuery] DateOnly date)
+    {
+        await stockService.ScrapeEodStockQuoteAsync(date);
+
+        return Ok(new ApiResultDto<object?>(null));
+    }
+
+    [HttpGet("scrape/info")]
+    public async Task<ActionResult<ApiResultDto<object>>> ScrapeStockInfo()
+    {
+        await stockService.ScrapeStockInfoAsync();
+
+        return Ok(new ApiResultDto<object?>(null));
+    }
 }

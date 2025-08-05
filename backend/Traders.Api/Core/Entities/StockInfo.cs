@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Traders.Api.Core.Types;
 
@@ -32,12 +33,12 @@ public class StockInfo
     /// <summary>
     /// 상장일
     /// </summary>
-    public DateOnly ListingDate { get; init; }
+    [Required] public DateOnly ListingDate { get; init; }
 
     /// <summary>
     /// 시장 구분 (KOSPI, KOSDAQ 등)
     /// </summary>
-    public MarketType Market { get; init; }
+    [Required] public MarketType Market { get; init; }
 
     /// <summary>
     /// 증권 구분 (주권, 투자회사 등)
@@ -57,12 +58,12 @@ public class StockInfo
     /// <summary>
     /// 액면가
     /// </summary>
-    public decimal ParValue { get; init; }
+    [Required] public decimal ParValue { get; init; }
 
     /// <summary>
     /// 상장 주식 수
     /// </summary>
-    public long OutstandingShares { get; init; }
+    [Required] public long OutstandingShares { get; init; }
 
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    [Required] public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }

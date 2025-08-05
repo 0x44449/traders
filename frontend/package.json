@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "api-code-gen": "openapi --input http://localhost:5101/swagger/v1/swagger.json --output api/generated --client axios --exportCore false --exportServices false --exportSchemas false"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
@@ -31,6 +32,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "openapi-typescript": "^7.8.0",
+    "openapi-typescript-codegen": "^0.29.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5"

@@ -83,14 +83,14 @@ export default function StockSearch() {
                     <X className="h-4 w-4" />
                   </Button>
                 )}
-                <Button
+                {/* <Button
                   onClick={handleSearch}
                   disabled={!inputValue.trim() || isSearching}
                   // className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                   className="px-6 py-2 bg-transparent text-gray-600 rounded-lg"
                 >
                   {isSearching ? '검색중...' : '검색'}
-                </Button>
+                </Button> */}
               </div>
             </div>
 
